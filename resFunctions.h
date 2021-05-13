@@ -37,3 +37,8 @@ typedef struct reservation{
 	struct tm *timeslot;
 	table *resTable;
 }reservation;
+
+
+int existence_cheque(char* fname);
+void create_restaurant(char* fname);
+
