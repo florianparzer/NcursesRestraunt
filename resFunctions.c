@@ -37,3 +37,36 @@ int existence_cheque(char* fname)
 
 	return 1;
 }
+
+void export_data(char* fname, table *tisch)
+{
+	FILE *fp=fopen(fname,"w+");
+
+	printf("\n%s\n", fname);
+
+	if(fp!=NULL){
+		fprintf(fp, "%d %d %d %d %d" ,tisch->id, tisch->xPos, tisch->yPos, tisch->width, tisch->height);
+	}else{
+		printf("\nERROR");
+	}
+
+	fclose(fp);
+
+}
+
+void  get_data(char* fname, table *tisch){
+
+	FILE *fp=fopen(fname,"r+");
+
+	if(fp!=NULL)
+	{
+		fscanf(fp,"%d%d%d%d%d",&tisch->id, &tisch->xPos, &tisch->yPos, &tisch->width, &tisch->height);
+
+	}else
+	{
+		printf("\nERROR");
+	}
+
+	fclose(fp);
+}
+

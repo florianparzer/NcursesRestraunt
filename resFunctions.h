@@ -41,4 +41,7 @@ typedef struct reservation{
 
 int existence_cheque(char* fname);
 void create_restaurant(char* fname);
+void get_data(char* fname, table *tisch);
+void export_data(char* fname, table *tisch);
+
 
