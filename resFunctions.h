@@ -29,6 +29,8 @@ typedef struct tableList{
 typedef struct room{
 	struct tablelist* head;
 	char *name;
+	int width;
+	int height;
 }room;
 
 typedef struct reservation{
