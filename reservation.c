@@ -32,17 +32,36 @@ int main(int argc, char *argv[]) {
 	printw("Press F1 to exit");
 	refresh();
 
-	nav = create_newwin(7, 25, 5, 0, '#');
-	mvwprintw(nav, 1, 2, "Save file");
-	mvwprintw(nav, 2, 2, "create table");
-	mvwprintw(nav, 3, 2, "delete table");
-	mvwprintw(nav, 4, 2, "create reservation");
-	mvwprintw(nav, 5, 2, "delete reservation");
+	nav = create_newwin(7, 30, 5, 0, '#');
+	mvwprintw(nav, 1, 2, "Save file <F2>");
+	mvwprintw(nav, 2, 2, "create table <F3>");
+	mvwprintw(nav, 3, 2, "delete table <F4>");
+	mvwprintw(nav, 4, 2, "create reservation <F5>");
+	mvwprintw(nav, 5, 2, "delete reservation <F6>");
 	wrefresh(nav);
 
 
 	while((ch = getch()) != KEY_F(1)) {
-		continue;
+
+		switch(ch) {
+			case KEY_F(2):
+					//TODO
+					break;
+			case KEY_F(3):
+					//TODO
+					break;
+			case KEY_F(4):
+					//TODO
+					break;
+			case KEY_F(5):
+					//TODO
+					break;
+			case KEY_F(6):
+					//TODO
+					break;
+			default:
+				break;
+    	}
 	}
 
 	//echo();
