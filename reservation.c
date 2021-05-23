@@ -13,6 +13,8 @@
 
 WINDOW *create_newwin(int hight, int width, int starty, int startx, int frame);
 void destroy_win(WINDOW *local_win);
+WINDOW *printRoom(room room);
+
 
 int main(int argc, char *argv[]) {
 	char file[20];
