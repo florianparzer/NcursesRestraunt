@@ -13,7 +13,7 @@
 
 WINDOW *create_newwin(int hight, int width, int starty, int startx, int frame);
 void destroy_win(WINDOW *local_win);
-WINDOW *printRoom(room room);
+WINDOW *printRoom(room *room);
 
 
 int main(int argc, char *argv[]) {
@@ -42,7 +42,31 @@ int main(int argc, char *argv[]) {
 	mvwprintw(nav, 5, 2, "delete reservation <F6>");
 	wrefresh(nav);
 
+	room *r = malloc(sizeof(room));
+	r->height=150;
+	r->width= 150;
+	tableList *list = malloc(sizeof(tableList));
+	r->head = list;
+	r->name = "Restraunt";
+	table *t = malloc(sizeof(table));
+	list->table = t;
+	t->height = 1;
+	t->width = 1;
+	t->xPos=10;
+	t->yPos = 70;
 
+	for(int i= 0; i < 3; i++){
+		t=malloc(sizeof(table));
+		t->height = 1+i;
+		t->width = 2+i;
+		t->xPos = 2*i;
+		t->yPos = 5*i;
+		list->nextTable = malloc(sizeof(tableList));
+		list = list->nextTable;
+		list->table = t;
+	}
+
+	WINDOW *wRoom = printRoom(r);
 	while((ch = getch()) != KEY_F(1)) {
 
 		switch(ch) {
@@ -70,11 +94,29 @@ int main(int argc, char *argv[]) {
 	endwin();
 }
 
+WINDOW *printRoom(room *room){
+	int rXpos = 32;
+	int rYpos = 1;
+	WINDOW *wRoom = create_newwin(room->height, room->width, rYpos, rXpos, '#');
+	//printf("test: %s\n", room->name);
+	mvwprintw(wRoom, 0, 2, "%s", room->name);
+	tableList *list = room->head;
+	table *table;
+	while(list!=NULL){
+		table = list->table;
+		table->win = create_newwin(table->height, table->width, table->yPos + rYpos +1, table->xPos + rXpos + 1, '#');
+		list = list->nextTable;
+	}
+	wrefresh(wRoom);
+	return wRoom;
+}
+
 
 WINDOW *create_newwin(int height, int width, int starty, int startx, int frame){
 	WINDOW *local_win;
 	local_win = newwin(height, width, starty, startx);
-	box(local_win, frame , frame);
+	//box(local_win, frame , frame);
+	wborder(local_win, '|', '|', '-','-','+','+','+','+');
 	wrefresh(local_win);            /* Show that box                */
 
 	return local_win;
