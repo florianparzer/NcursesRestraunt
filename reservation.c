@@ -14,6 +14,7 @@
 WINDOW *create_newwin(int hight, int width, int starty, int startx, int frame);
 void destroy_win(WINDOW *local_win);
 WINDOW *printRoom(room *room);
+room *createRoom(int width, int height, char *name);
 
 
 int main(int argc, char *argv[]) {
@@ -42,12 +43,9 @@ int main(int argc, char *argv[]) {
 	mvwprintw(nav, 5, 2, "delete reservation <F6>");
 	wrefresh(nav);
 
-	room *r = malloc(sizeof(room));
-	r->height=150;
-	r->width= 150;
+	room *r = createRoom(150, 150, "Restraunt");
 	tableList *list = malloc(sizeof(tableList));
 	r->head = list;
-	r->name = "Restraunt";
 	table *t = malloc(sizeof(table));
 	list->table = t;
 	t->height = 1;
@@ -109,6 +107,14 @@ WINDOW *printRoom(room *room){
 	}
 	wrefresh(wRoom);
 	return wRoom;
+}
+
+room *createRoom(int width, int height, char *name){
+	room *result = malloc(sizeof(room));
+	result->width = width;
+	result->height = height;
+	result->name = name;
+	return result;
 }
 
 
