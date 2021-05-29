@@ -150,12 +150,12 @@ WINDOW *printRoom(room *room){
 	mvwprintw(wRoom, 0, 2, "%s", room->name);
 	tableList *list = room->head;
 	table *t;
-	while(list!=NULL){
+	while(list != NULL){
 		t = list->table;
 		t->win = create_newwin(t->height, t->width, t->yPos + rYpos +1, t->xPos + rXpos + 1);
 		list = list->nextTable;
 		wrefresh(wRoom);
-
+		sleep(15);
 	}
 	wrefresh(wRoom);
 	return wRoom;
