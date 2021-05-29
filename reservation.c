@@ -152,10 +152,13 @@ WINDOW *printRoom(room *room){
 	table *t;
 	while(list != NULL){
 		t = list->table;
-		t->win = create_newwin(t->height, t->width, t->yPos + rYpos +1, t->xPos + rXpos + 1);
+		if(t->win == NULL){
+			t->win = create_newwin(t->height, t->width, t->yPos + rYpos +1, t->xPos + rXpos + 1);
+		}
 		list = list->nextTable;
 		wrefresh(wRoom);
-		sleep(15);
+
+		//sleep(10);
 	}
 	wrefresh(wRoom);
 	return wRoom;

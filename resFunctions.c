@@ -76,6 +76,7 @@ room *createRoom(int width, int height, char *name){
 	result->height = height;
 	result->name = name;
 	tableList *list = malloc(sizeof(tableList));
+	list->nextTable = NULL;
 	result->head = list;
 	return result;
 }
@@ -88,8 +89,10 @@ void addTable(room *room, int id, int xPos, int yPos, int height, int width){
 	newTable->yPos = yPos;
 	newTable->height = height;
 	newTable->width = width;
+	newTable->win = NULL;
 	table *tmp;
 	while(1){
+		printf("add\n");
 		tmp = list->table;
 		if(tmp == NULL){
 			list->table = newTable;
@@ -98,11 +101,13 @@ void addTable(room *room, int id, int xPos, int yPos, int height, int width){
 			list->table = newTable;
 			list->nextTable = malloc(sizeof(tableList));
 			list = list->nextTable;
+			list->nextTable = NULL;
 			list->table = tmp;
 			break;
 		}else if(list->nextTable == NULL){
 			list->nextTable = malloc(sizeof(tableList));
 			list = list->nextTable;
+			list->nextTable = NULL;
 			list->table = newTable;
 			break;
 		}
