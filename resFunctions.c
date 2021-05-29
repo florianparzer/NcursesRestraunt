@@ -70,3 +70,43 @@ void  get_data(char* fname, table *tisch){
 	fclose(fp);
 }
 
+room *createRoom(int width, int height, char *name){
+	room *result = malloc(sizeof(room));
+	result->width = width;
+	result->height = height;
+	result->name = name;
+	tableList *list = malloc(sizeof(tableList));
+	result->head = list;
+	return result;
+}
+
+void addTable(room *room, int id, int xPos, int yPos, int height, int width){
+	tableList *list = room->head;
+	table *newTable = malloc(sizeof(table));
+	newTable->id = id;
+	newTable->xPos = xPos;
+	newTable->yPos = yPos;
+	newTable->height = height;
+	newTable->width = width;
+	table *tmp;
+	while(1){
+		tmp = list->table;
+		if(tmp == NULL){
+			list->table = newTable;
+			break;
+		}else if(id < tmp->id){
+			list->table = newTable;
+			list->nextTable = malloc(sizeof(tableList));
+			list = list->nextTable;
+			list->table = tmp;
+			break;
+		}else if(list->nextTable == NULL){
+			list->nextTable = malloc(sizeof(tableList));
+			list = list->nextTable;
+			list->table = newTable;
+			break;
+		}
+		list = list->nextTable;
+	}
+}
+

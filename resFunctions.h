@@ -8,6 +8,7 @@
 #ifndef SRC_17_RESFUNCTIONS_H_
 #define SRC_17_RESFUNCTIONS_H_
 #include <time.h>
+#include <ncurses.h>
 
 
 #endif /* SRC_17_RESFUNCTIONS_H_ */
@@ -19,6 +20,7 @@ typedef struct table{
 	int yPos;
 	int width;
 	int height;
+	WINDOW *win;
 }table;
 
 typedef struct tableList{
@@ -31,6 +33,7 @@ typedef struct room{
 	char *name;
 	int width;
 	int height;
+	WINDOW *win;
 }room;
 
 typedef struct reservation{
@@ -45,5 +48,7 @@ int existence_cheque(char* fname);
 void create_restaurant(char* fname);
 void get_data(char* fname, table *tisch);
 void export_data(char* fname, table *tisch);
-
+room *createRoom(int width, int height, char *name);
+void addTable(room *room, int id, int xPos, int yPos, int height, int width);
+void remove1Table(room *room, int id);
 
