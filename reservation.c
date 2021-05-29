@@ -17,7 +17,7 @@ WINDOW *printRoom(room *room);
 
 
 
-int ast(int argc, char *argv[]) {
+int main(int argc, char *argv[]) {
 	char file[20];
 	char buffer[30];
 	WINDOW *nav;
@@ -152,9 +152,10 @@ WINDOW *printRoom(room *room){
 	table *t;
 	while(list!=NULL){
 		t = list->table;
-		printf("\n%d %d %d %d %d \n", t->id, t->xPos, t->yPos, t->width, t->height);
 		t->win = create_newwin(t->height, t->width, t->yPos + rYpos +1, t->xPos + rXpos + 1);
 		list = list->nextTable;
+		wrefresh(wRoom);
+
 	}
 	wrefresh(wRoom);
 	return wRoom;
