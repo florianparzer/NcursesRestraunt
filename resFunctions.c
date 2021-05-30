@@ -167,8 +167,8 @@ void addTable(room *room, int id, int xPos, int yPos, int height, int width){
 	}
 
 	while(list != NULL){
-		printf("while %d %d\n", tmp->xPos, tmp->yPos);
 		tmp = list->table;
+		printf("while %d %d\n", tmp->xPos, tmp->yPos);
 		sleep(5);
 		if((xPos >= tmp->xPos-2 && xPos <= tmp->xPos+tmp->width+2) &&
 				(yPos >= tmp->yPos-2 && yPos <= tmp->yPos + tmp->height+2)){
@@ -190,6 +190,7 @@ void addTable(room *room, int id, int xPos, int yPos, int height, int width){
 
 	printf("test0");
 	tmp = NULL;
+	list = room->head;
 	while(1){
 		tmp = list->table;
 		if(tmp == NULL){
