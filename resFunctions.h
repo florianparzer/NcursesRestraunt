@@ -51,4 +51,7 @@ void export_data(char* fname, table *tisch);
 room *createRoom(int width, int height, char *name);
 void addTable(room *room, int id, int xPos, int yPos, int height, int width);
 void remove1Table(room *room, int id);
-
+void destroyTable(table *t);
+WINDOW *create_newwin(int hight, int width, int starty, int startx);
+void destroy_win(WINDOW *local_win);
+WINDOW *printRoom(room *room);

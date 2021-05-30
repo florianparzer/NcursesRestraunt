@@ -11,10 +11,6 @@
 #include <ncurses.h>
 #include "resFunctions.h"
 
-WINDOW *create_newwin(int hight, int width, int starty, int startx);
-void destroy_win(WINDOW *local_win);
-WINDOW *printRoom(room *room);
-
 
 
 int main(int argc, char *argv[]) {
@@ -58,18 +54,9 @@ int main(int argc, char *argv[]) {
 	addTable(r, 100, 1, 1, 1, 1);
 
 
-	/*for(int i= 0; i < 3; i++){
+	for(int i= 0; i < 3; i++){
 		addTable(r, i, 2*i, 5*i, 1+i, 2+i);
-		t=malloc(sizeof(table));
-		t->height = 1+i;
-		t->width = 2+i;
-		t->xPos = 2*i;
-		t->yPos = 5*i;
-		list->nextTable = malloc(sizeof(tableList));
-		list = list->nextTable;
-		list->table = t;
-	}*/
-
+	}
 	WINDOW *wRoom = printRoom(r);
 	while((ch = getch()) != KEY_F(1)) {
 
@@ -78,21 +65,26 @@ int main(int argc, char *argv[]) {
 					//TODO
 					break;
 			case KEY_F(3):
-					/*
+
 					echo();
-					mvwscanw(nav, navHeight-2, 2, "%d", id);
-					mvwscanw(nav, navHeight-2, 2, "%29s", " ");
+					mvwscanw(nav, navHeight-2, 2, "%d\n", &id);
+					mvwprintw(nav, navHeight-2, 2, "%29s", " ");
 					wrefresh(nav);
-					mvwscanw(nav, navHeight-2, 2, "%d", tXpos);
-					mvwscanw(nav, navHeight-2, 2, "%d", tYpos);
-					mvwscanw(nav, navHeight-2, 2, "%d", tHeight);
-					mvwscanw(nav, navHeight-2, 2, "%d", tWitdth);
+					mvwscanw(nav, navHeight-2, 2, "%d", &tXpos);
+					mvwprintw(nav, navHeight-2, 2, "%29s", " ");
+					wrefresh(nav);
+					mvwscanw(nav, navHeight-2, 2, "%d", &tYpos);
+					mvwprintw(nav, navHeight-2, 2, "%29s", " ");
+					wrefresh(nav);
+					mvwscanw(nav, navHeight-2, 2, "%d", &tHeight);
+					mvwprintw(nav, navHeight-2, 2, "%29s", " ");
+					wrefresh(nav);
+					mvwscanw(nav, navHeight-2, 2, "%d", &tWitdth);
 					noecho();
-					mvwscanw(nav, navHeight-2, 2, "%29s", " ");
+					mvwprintw(nav, navHeight-2, 2, "%29s", " ");
 					wrefresh(nav);
 					addTable(r, id, tXpos, tYpos, tHeight, tWitdth);
 					printRoom(r);
-					*/
 					break;
 			case KEY_F(4):
 					//TODO
@@ -110,58 +102,6 @@ int main(int argc, char *argv[]) {
 
 	echo();
 	endwin();
-}
-
-
-WINDOW *create_newwin(int height, int width, int starty, int startx){
-	WINDOW *local_win;
-	local_win = newwin(height, width, starty, startx);
-	//box(local_win, frame , frame);
-	wborder(local_win, '|', '|', '-','-','+','+','+','+');
-	wrefresh(local_win);            /* Show that box                */
-
-	return local_win;
-}
-
-void destroy_win(WINDOW *local_win) {
-	/* box(local_win, ' ', ' '); : This won't produce the desired
-	 * * result of erasing the window. It will leave it's four corners
-	 * * and so an ugly remnant of window.          */
-
-	wborder(local_win, ' ', ' ', ' ',' ',' ',' ',' ',' ');
-	/* The parameters taken are
-	 * * 1. win: the window on which to operate
-	 * * 2. ls: character to be used for the left side of the window
-	 * * 3. rs: character to be used for the right side of the window
-	 * * 4. ts: character to be used for the top side of the window
-	 * * 5. bs: character to be used for the bottom side of the window
-	 * * 6. tl: character to be used for the top left corner of the window
-	 * * 7. tr: character to be used for the top right corner of the window
-	 * * 8. bl: character to be used for the bottom left corner of the window
-	 * * 9. br: character to be used for the bottom right corner of the window         */
-	wrefresh(local_win);
-	delwin(local_win);
-}
-
-WINDOW *printRoom(room *room){
-	int rXpos = 34;
-	int rYpos = 1;
-	WINDOW *wRoom = create_newwin(room->height, room->width, rYpos, rXpos);
-	mvwprintw(wRoom, 0, 2, "%s", room->name);
-	tableList *list = room->head;
-	table *t;
-	while(list != NULL){
-		t = list->table;
-		if(t->win == NULL){
-			t->win = create_newwin(t->height, t->width, t->yPos + rYpos +1, t->xPos + rXpos + 1);
-		}
-		list = list->nextTable;
-		wrefresh(wRoom);
-
-		//sleep(10);
-	}
-	wrefresh(wRoom);
-	return wRoom;
 }
 
 
