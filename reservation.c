@@ -11,8 +11,6 @@
 #include <ncurses.h>
 #include "resFunctions.h"
 
-
-
 int main(int argc, char *argv[]) {
 	char file[20];
 	char buffer[30];
@@ -51,7 +49,7 @@ int main(int argc, char *argv[]) {
 	wrefresh(nav);
 
 	room *r = createRoom(150, 70, "Restraunt");
-	addTable(r, 100, 1, 1, 1, 1);
+	addTable(r, 100, 30, 30, 20, 20);
 
 
 	for(int i= 0; i < 3; i++){
@@ -67,22 +65,27 @@ int main(int argc, char *argv[]) {
 			case KEY_F(3):
 
 					echo();
-					mvwscanw(nav, navHeight-2, 2, "%d\n", &id);
-					mvwprintw(nav, navHeight-2, 2, "%29s", " ");
-					wrefresh(nav);
-					mvwscanw(nav, navHeight-2, 2, "%d", &tXpos);
-					mvwprintw(nav, navHeight-2, 2, "%29s", " ");
-					wrefresh(nav);
-					mvwscanw(nav, navHeight-2, 2, "%d", &tYpos);
-					mvwprintw(nav, navHeight-2, 2, "%29s", " ");
-					wrefresh(nav);
-					mvwscanw(nav, navHeight-2, 2, "%d", &tHeight);
-					mvwprintw(nav, navHeight-2, 2, "%29s", " ");
-					wrefresh(nav);
-					mvwscanw(nav, navHeight-2, 2, "%d", &tWitdth);
+					mvprintw(PROMPTLINE, 0, "Bitte gibt eine ID ein");
+					mvscanw(INPUTLINE, 0, "%d", &id);
+					clearLine(INPUTLINE);
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte gibt die X Position an");
+					mvscanw(INPUTLINE, 0, "%d", &tXpos);
+					clearLine(PROMPTLINE);
+					clearLine(INPUTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte gibt die Y Position an");
+					mvscanw(INPUTLINE, 0, "%d", &tYpos);
+					clearLine(PROMPTLINE);
+					clearLine(INPUTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte gibt die Höhe an");
+					mvscanw(INPUTLINE, 0, "%d", &tHeight);
+					clearLine(PROMPTLINE);
+					clearLine(INPUTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte gibt die Breite an");
+					mvscanw(INPUTLINE, 0, "%d", &tWitdth);
 					noecho();
-					mvwprintw(nav, navHeight-2, 2, "%29s", " ");
-					wrefresh(nav);
+					clearLine(PROMPTLINE);
+					clearLine(INPUTLINE);
 					addTable(r, id, tXpos, tYpos, tHeight, tWitdth);
 					printRoom(r);
 					break;

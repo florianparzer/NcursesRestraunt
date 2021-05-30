@@ -43,6 +43,9 @@ typedef struct reservation{
 	table *resTable;
 }reservation;
 
+int PROMPTLINE;
+int INPUTLINE;
+
 
 int existence_cheque(char* fname);
 void create_restaurant(char* fname);
@@ -55,3 +58,4 @@ void destroyTable(table *t);
 WINDOW *create_newwin(int hight, int width, int starty, int startx);
 void destroy_win(WINDOW *local_win);
 WINDOW *printRoom(room *room);
+void clearLine(int line);

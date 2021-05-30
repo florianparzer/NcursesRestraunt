@@ -11,6 +11,9 @@
 #include <ncurses.h>
 #include"resFunctions.h"
 
+int PROMPTLINE = 1;
+int INPUTLINE = 2;
+
 void create_restaurant(char* fname)
 {
 	FILE *fp=fopen(fname, "w+");
@@ -104,7 +107,7 @@ void destroy_win(WINDOW *local_win) {
 
 WINDOW *printRoom(room *room){
 	int rXpos = 34;
-	int rYpos = 2;
+	int rYpos = 3;
 	WINDOW *wRoom;
 	if(room->win == NULL){
 		wRoom = create_newwin(room->height, room->width, rYpos, rXpos);
@@ -138,18 +141,15 @@ room *createRoom(int width, int height, char *name){
 	result->height = height;
 	result->name = name;
 	result->win = NULL;
-	tableList *list = malloc(sizeof(tableList));
-	list->nextTable = NULL;
-	result->head = list;
+	tableList *list = NULL;
 	return result;
 }
 
 void addTable(room *room, int id, int xPos, int yPos, int height, int width){
+	printf("%d %d\n", xPos, yPos);
+	sleep(5);
 	tableList *list = room->head;
-	if(list == NULL){
-		list = malloc(sizeof(tableList));
-	}
-	table *newTable = malloc(sizeof(table));
+	table *newTable= malloc(sizeof(table));
 	newTable->id = id;
 	newTable->xPos = xPos;
 	newTable->yPos = yPos;
@@ -158,6 +158,38 @@ void addTable(room *room, int id, int xPos, int yPos, int height, int width){
 	newTable->win = NULL;
 	table *tmp;
 
+	if(list == NULL){
+		list = malloc(sizeof(tableList));
+		list->table = newTable;
+		list->nextTable = NULL;
+		room->head = list;
+		return;
+	}
+
+	while(list != NULL){
+		printf("while %d %d\n", tmp->xPos, tmp->yPos);
+		tmp = list->table;
+		sleep(5);
+		if((xPos >= tmp->xPos-2 && xPos <= tmp->xPos+tmp->width+2) &&
+				(yPos >= tmp->yPos-2 && yPos <= tmp->yPos + tmp->height+2)){
+			printf("test1\n");
+			mvprintw(PROMPTLINE, 0, "Position des Tisches %d nicht möglich", id);
+			free(tmp);
+			return;
+		}
+		if((xPos < tmp->xPos -2 && xPos+width >= tmp->xPos-2 && (yPos >= tmp->yPos-2 && yPos <= tmp->yPos+tmp->height+2)) ||
+				(yPos < tmp->yPos -2 && yPos+height >= tmp->yPos -2 && (xPos >= tmp->xPos-2 && xPos <= tmp->xPos+tmp->width+2))||
+				(xPos < tmp->xPos-2 && yPos < tmp->yPos && xPos + width > tmp->xPos -2 && yPos + height >= tmp->yPos -2)){
+			printf("test1\n");
+			mvprintw(PROMPTLINE, 0, "Position des Tisches %d nicht möglich", id);
+			free(tmp);
+			return;
+		}
+		list = list->nextTable;
+	}
+
+	printf("test0");
+	tmp = NULL;
 	while(1){
 		tmp = list->table;
 		if(tmp == NULL){
@@ -210,4 +242,11 @@ void remove1Table(room *room, int id){
 void destroyTable(table *t){
 	destroy_win(t->win);
 	free(t);
+}
+
+void clearLine(int line){
+	for(int i = 0; i < COLS; i++){
+		mvprintw(line, i, " ");
+	}
+	refresh();
 }
