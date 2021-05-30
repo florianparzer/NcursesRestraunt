@@ -180,7 +180,7 @@ void addTable(room *room, int id, int xPos, int yPos, int height, int width){
 		if((xPos < tmp->xPos -2 && xPos+width >= tmp->xPos-2 && (yPos >= tmp->yPos-2 && yPos <= tmp->yPos+tmp->height+2)) ||
 				(yPos < tmp->yPos -2 && yPos+height >= tmp->yPos -2 && (xPos >= tmp->xPos-2 && xPos <= tmp->xPos+tmp->width+2))||
 				(xPos < tmp->xPos-2 && yPos < tmp->yPos && xPos + width > tmp->xPos -2 && yPos + height >= tmp->yPos -2)){
-			printf("test1\n");
+			printf("test2\n");
 			mvprintw(PROMPTLINE, 0, "Position des Tisches %d nicht möglich", id);
 			free(tmp);
 			return;
@@ -188,7 +188,7 @@ void addTable(room *room, int id, int xPos, int yPos, int height, int width){
 		list = list->nextTable;
 	}
 
-	printf("test0");
+	printf("test0\n");
 	tmp = NULL;
 	list = room->head;
 	while(1){

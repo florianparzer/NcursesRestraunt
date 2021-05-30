@@ -50,6 +50,7 @@ int main(int argc, char *argv[]) {
 
 	room *r = createRoom(150, 70, "Restraunt");
 	addTable(r, 100, 30, 30, 20, 20);
+	addTable(r, 101, 35, 35, 20, 20);
 
 
 	for(int i= 0; i < 3; i++){
