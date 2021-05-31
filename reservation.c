@@ -11,49 +11,111 @@
 #include <ncurses.h>
 #include "resFunctions.h"
 
-WINDOW *create_newwin(int hight, int width, int starty, int startx, int frame);
-void destroy_win(WINDOW *local_win);
-WINDOW *printRoom(room room);
-
-
 int main(int argc, char *argv[]) {
 	char file[20];
+	char buffer[30];
 	WINDOW *nav;
+	int navHeight = 10;
+	int navWidth = 32;
 	int ch;
-/*
-	if(argc == 1){
-		scanf("%s", file);
-	}else{
-		strcpy(file,argv[1]);
-	}
-*/
+	room *r = NULL;
+	WINDOW *wRoom = NULL;
+
+	int id = 0;
+	int tXpos;
+	int tYpos;
+	int tHeight;
+	int tWitdth;
+
+
 	initscr();
-	//noecho();
+	noecho();
 	cbreak();
 	keypad(stdscr, TRUE);
 	printw("Press F1 to exit");
 	refresh();
 
-	nav = create_newwin(7, 30, 5, 0, '#');
+	nav = create_newwin(navHeight, navWidth, 5, 0);
 	mvwprintw(nav, 1, 2, "Save file <F2>");
 	mvwprintw(nav, 2, 2, "create table <F3>");
 	mvwprintw(nav, 3, 2, "delete table <F4>");
 	mvwprintw(nav, 4, 2, "create reservation <F5>");
 	mvwprintw(nav, 5, 2, "delete reservation <F6>");
+	mvwprintw(nav, 6, 2, "create room <F7>");
+	mvwprintw(nav, 7, 2, "delete room <F8>");
 	wrefresh(nav);
 
+	/*
+	room *r = createRoom(150, 70, "Restraunt");
+	addTable(r, 100, 30, 30, 20, 20);
+	addTable(r, 101, 35, 35, 20, 20);
 
-	while((ch = getch()) != KEY_F(1)) {
 
+	for(int i= 0; i < 3; i++){
+		addTable(r, i, 2*i, 5*i, 1+i, 2+i);
+	}
+	*/
+
+	if(argc == 1){
+		echo();
+		clearLine(PROMPTLINE);
+		mvprintw(PROMPTLINE, 0, "Bitte geben Sie ein file Namen ein");
+		mvscanw(INPUTLINE, 0, "%s", file);
+		noecho();
+		clearLine(INPUTLINE);
+		clearLine(PROMPTLINE);
+	}else{
+		strcpy(file,argv[1]);
+	}
+
+	//TODO Input Davor
+
+	while(1) {
+		wRoom = printRoom(r);
+
+		if((ch = getch()) == KEY_F(1)){
+			break;
+		}
 		switch(ch) {
 			case KEY_F(2):
 					//TODO
 					break;
 			case KEY_F(3):
-					//TODO
+
+					echo();
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte gibt eine ID ein");
+					mvscanw(INPUTLINE, 0, "%d", &id);
+					clearLine(INPUTLINE);
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte gibt die X Position an");
+					mvscanw(INPUTLINE, 0, "%d", &tXpos);
+					clearLine(PROMPTLINE);
+					clearLine(INPUTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte gibt die Y Position an");
+					mvscanw(INPUTLINE, 0, "%d", &tYpos);
+					clearLine(PROMPTLINE);
+					clearLine(INPUTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte gibt die Höhe an");
+					mvscanw(INPUTLINE, 0, "%d", &tHeight);
+					clearLine(PROMPTLINE);
+					clearLine(INPUTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte gibt die Breite an");
+					mvscanw(INPUTLINE, 0, "%d", &tWitdth);
+					noecho();
+					clearLine(PROMPTLINE);
+					clearLine(INPUTLINE);
+					addTable(r, id, tXpos, tYpos, tHeight, tWitdth);
+					printRoom(r);
 					break;
 			case KEY_F(4):
-					//TODO
+					echo();
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte gib die ID des zu löschenden Tisches ein ");
+					mvscanw(INPUTLINE, 0, "%d", &id);
+					clearLine(INPUTLINE);
+					clearLine(PROMPTLINE);
+					remove1Table(r, id);
 					break;
 			case KEY_F(5):
 					//TODO
@@ -61,41 +123,47 @@ int main(int argc, char *argv[]) {
 			case KEY_F(6):
 					//TODO
 					break;
+			case KEY_F(7):
+					echo();
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte gib einen Namen ein");
+					mvscanw(INPUTLINE, 0, "%s", &buffer);
+					clearLine(INPUTLINE);
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte gib eine Breite an");
+					mvscanw(INPUTLINE, 0, "%d", &tWitdth);
+					clearLine(PROMPTLINE);
+					clearLine(INPUTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte gib eine Höhe an");
+					mvscanw(INPUTLINE, 0, "%d", &tHeight);
+					noecho();
+					clearLine(PROMPTLINE);
+					clearLine(INPUTLINE);
+					r = createRoom(tWitdth, tHeight, buffer);
+					break;
+			case KEY_F(8):
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Wollen Sie den Raum wieklich löschen (y/n)");
+
+					while((ch = getch()) != KEY_F(1)){
+						if(ch == 'y' || ch == 'Y'){
+							deleteRoom(r);
+							r = NULL;
+							break;
+						}
+						if(ch == 'n' || ch == 'N'){
+							break;
+						}
+					}
+					clearLine(PROMPTLINE);
+					break;
 			default:
 				break;
     	}
 	}
 
-	//echo();
+	echo();
 	endwin();
 }
 
 
-WINDOW *create_newwin(int height, int width, int starty, int startx, int frame){
-	WINDOW *local_win;
-	local_win = newwin(height, width, starty, startx);
-	box(local_win, frame , frame);
-	wrefresh(local_win);            /* Show that box                */
-
-	return local_win;
-}
-
-void destroy_win(WINDOW *local_win) {
-	/* box(local_win, ' ', ' '); : This won't produce the desired
-	 * * result of erasing the window. It will leave it's four corners
-	 * * and so an ugly remnant of window.          */
-
-	wborder(local_win, ' ', ' ', ' ',' ',' ',' ',' ',' ');
-	/* The parameters taken are
-	 * * 1. win: the window on which to operate
-	 * * 2. ls: character to be used for the left side of the window
-	 * * 3. rs: character to be used for the right side of the window
-	 * * 4. ts: character to be used for the top side of the window
-	 * * 5. bs: character to be used for the bottom side of the window
-	 * * 6. tl: character to be used for the top left corner of the window
-	 * * 7. tr: character to be used for the top right corner of the window
-	 * * 8. bl: character to be used for the bottom left corner of the window
-	 * * 9. br: character to be used for the bottom right corner of the window         */
-	wrefresh(local_win);
-	delwin(local_win);
-}
