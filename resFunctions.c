@@ -167,7 +167,10 @@ void deleteRoom(room *room){
 }
 
 void addTable(room *room, int id, int xPos, int yPos, int height, int width){
-
+	if(xPos < 1 || yPos < 1 || xPos+width > room->width-1 || yPos+height > room->height - 1){
+		mvprintw(PROMPTLINE, 0, "Position des Tisches %d nicht möglich", id);
+		return;
+	}
 	tableList *list = room->head;
 	table *newTable= malloc(sizeof(table));
 	newTable->id = id;
