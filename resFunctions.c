@@ -106,6 +106,9 @@ void destroy_win(WINDOW *local_win) {
 }
 
 WINDOW *printRoom(room *room){
+	if(room == NULL){
+		return NULL;
+	}
 	int rXpos = 34;
 	int rYpos = 3;
 	WINDOW *wRoom;
@@ -142,12 +145,29 @@ room *createRoom(int width, int height, char *name){
 	result->name = name;
 	result->win = NULL;
 	tableList *list = NULL;
+	result->win = NULL;
 	return result;
 }
 
+void deleteRoom(room *room){
+	tableList *list = room->head;
+	tableList *tmp;
+	table *t;
+
+	while(list != NULL){
+		t = list->table;
+		destroyTable(t);
+		tmp =list;
+		list = list->nextTable;
+		free(tmp);
+	}
+
+	destroy_win(room->win);
+	free(room);
+}
+
 void addTable(room *room, int id, int xPos, int yPos, int height, int width){
-	printf("%d %d\n", xPos, yPos);
-	sleep(5);
+
 	tableList *list = room->head;
 	table *newTable= malloc(sizeof(table));
 	newTable->id = id;
@@ -168,27 +188,20 @@ void addTable(room *room, int id, int xPos, int yPos, int height, int width){
 
 	while(list != NULL){
 		tmp = list->table;
-		printf("while %d %d\n", tmp->xPos, tmp->yPos);
-		sleep(5);
 		if((xPos >= tmp->xPos-2 && xPos <= tmp->xPos+tmp->width+2) &&
 				(yPos >= tmp->yPos-2 && yPos <= tmp->yPos + tmp->height+2)){
-			printf("test1\n");
 			mvprintw(PROMPTLINE, 0, "Position des Tisches %d nicht möglich", id);
-			free(tmp);
 			return;
 		}
 		if((xPos < tmp->xPos -2 && xPos+width >= tmp->xPos-2 && (yPos >= tmp->yPos-2 && yPos <= tmp->yPos+tmp->height+2)) ||
 				(yPos < tmp->yPos -2 && yPos+height >= tmp->yPos -2 && (xPos >= tmp->xPos-2 && xPos <= tmp->xPos+tmp->width+2))||
 				(xPos < tmp->xPos-2 && yPos < tmp->yPos && xPos + width > tmp->xPos -2 && yPos + height >= tmp->yPos -2)){
-			printf("test2\n");
 			mvprintw(PROMPTLINE, 0, "Position des Tisches %d nicht möglich", id);
-			free(tmp);
 			return;
 		}
 		list = list->nextTable;
 	}
 
-	printf("test0\n");
 	tmp = NULL;
 	list = room->head;
 	while(1){

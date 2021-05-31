@@ -52,6 +52,7 @@ void create_restaurant(char* fname);
 void get_data(char* fname, table *tisch);
 void export_data(char* fname, table *tisch);
 room *createRoom(int width, int height, char *name);
+void deleteRoom(room *room);
 void addTable(room *room, int id, int xPos, int yPos, int height, int width);
 void remove1Table(room *room, int id);
 void destroyTable(table *t);
