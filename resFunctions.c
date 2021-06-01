@@ -170,6 +170,7 @@ void deleteRoom(room *room){
 	}
 
 	destroy_win(room->win);
+	free(room->name);
 	free(room);
 }
 
@@ -261,6 +262,46 @@ void remove1Table(room *room, int id){
 		list = list->nextTable;
 		tmp = list->table;
 	}
+}
+
+tableList *getTables(table *t, tableList *list, int perimeter){
+	tableList *element = malloc(sizeof(tableList));
+	tableList *result = element;
+	tableList *cur = list;
+	table *tmp;
+	int pXpos = t->xPos-perimeter;
+	int pYpos = t->yPos-perimeter;
+	int pHeight = t->height +2*perimeter;
+	int pWidth = t->width + 2*perimeter;
+	while((tmp = cur->table) != NULL){
+		if((tmp->xPos >= pXpos && tmp->xPos <= pXpos+pWidth) || (tmp->xPos+tmp->width >= pXpos && tmp->xPos + tmp->width <= pXpos + pWidth)){
+			if((tmp->yPos >= pYpos && tmp->yPos <= pYpos + pHeight) || (tmp->yPos+tmp->height >= pYpos && tmp->yPos + tmp->height <= pYpos + pHeight)){
+				element->table = tmp;
+				element->nextTable = malloc(sizeof(tableList));
+				element = element->nextTable;
+				cur = cur->nextTable;
+				continue;
+			}
+		}
+		if((pXpos >= tmp->xPos && pXpos <= tmp->xPos + tmp->width) || (pXpos + pWidth >= tmp->xPos && pXpos + pWidth <= tmp->xPos + tmp->width)){
+			if((pYpos >= tmp->yPos && pYpos <= tmp->yPos + tmp->height) || (pYpos + pHeight >= tmp->yPos && pXpos + pHeight <= tmp->yPos + tmp->height)){
+				element->table = tmp;
+				element->nextTable = malloc(sizeof(tableList));
+				element = element->nextTable;
+				cur = cur->nextTable;
+				continue;
+			}
+		}
+		cur = cur->nextTable;
+	}
+	free(element);
+	return result;
+}
+
+void checkResevation(reservation *res, tableList *list, int perimeter){
+	table *tab = res->resTable;
+	tableList *possibleTables = getTables(tab, list, perimeter);
+
 }
 
 void destroyTable(table *t){

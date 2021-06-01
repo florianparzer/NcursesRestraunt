@@ -63,6 +63,12 @@ WINDOW *create_newwin(int hight, int width, int starty, int startx);
 void destroy_win(WINDOW *local_win);
 WINDOW *printRoom(room *room);
 void clearLine(int line);
+<<<<<<< HEAD
 void addReservation(reservation *res, room *raum, char* kontaktp, int id, struct tm *sTime, struct tm *eTime);
 
 
+=======
+void addReservation(reservation *res, room *raum, char* kontaktp, int id);
+tableList *getTables(table *t, tableList *list, int perimeter);
+void checkResevation(reservation *res, tableList *list, int perimeter);
+>>>>>>> 91693d2 (Functionen für CheckReservations gemacht)
