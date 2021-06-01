@@ -49,8 +49,8 @@ int INPUTLINE;
 
 int existence_cheque(char* fname);
 void create_restaurant(char* fname);
-void get_data(char* fname, table *tisch);
-void export_data(char* fname, table *tisch);
+void get_data(char* fname, table *tisch, reservation *res, room *raum);
+void export_data(char* fname, table *tisch, reservation *res, room *raum);
 room *createRoom(int width, int height, char *name);
 void deleteRoom(room *room);
 void addTable(room *room, int id, int xPos, int yPos, int height, int width);

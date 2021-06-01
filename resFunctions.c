@@ -42,35 +42,47 @@ int existence_cheque(char* fname)
 	return 1;
 }
 
-void export_data(char* fname, table *tisch)
+
+void export_data(char* fname, table *tisch, reservation *res, room *raum)
 {
 	FILE *fp=fopen(fname,"w+");
 
-	printf("\n%s\n", fname);
-
 	if(fp!=NULL){
-		fprintf(fp, "%d %d %d %d %d" ,tisch->id, tisch->xPos, tisch->yPos, tisch->width, tisch->height);
+		if((tisch->id<=0)||(tisch->xPos<=0)||(tisch->yPos<=0)||(tisch->height<=0)||(tisch->width<=0)||(res->id<=0)||(raum->width<=0)||(raum->height<=0)
+				||(tisch->width>=raum->width-2)||(tisch->height>=raum->height-2)||(tisch->xPos>=raum->width-4)||(tisch->yPos>=raum->height-4))
+		{
+			printf("\nUngültige Werte f. Exportdatei\n");
+		}else{
+			fprintf(fp, "%d %d %d %d %d %d %d %d %s\n" ,tisch->id, tisch->xPos, tisch->yPos, tisch->width, tisch->height, res->id, raum->width, raum->height,raum->name);
+		}
 	}else{
-		printf("\nERROR");
+		printf("\nFILE couldn't be oppened");
 	}
-
 	fclose(fp);
 
 }
 
-void  get_data(char* fname, table *tisch){
+void  get_data(char* fname, table *tisch, reservation * res, room *raum){
 
 	FILE *fp=fopen(fname,"r+");
 
 	if(fp!=NULL)
 	{
-		fscanf(fp,"%d%d%d%d%d",&tisch->id, &tisch->xPos, &tisch->yPos, &tisch->width, &tisch->height);
+		raum->name=malloc(sizeof(char)*50);
+		tisch->win=NULL;
+		raum->win=NULL;
 
+		if(fscanf(fp,"%d %d %d %d %d %d %d %d %s",&tisch->id, &tisch->xPos, &tisch->yPos, &tisch->width, &tisch->height, &res->id, &raum->width, &raum->height, raum->name)>9)// in eine if abfrage einbündeln ob anzahl der benötigten Variablen funktioniert hat
+					printf("too much files!!!\n");//raum->name=rname;
+
+		if((tisch->id<=0)||(tisch->xPos<=0)||(tisch->yPos<=0)||(tisch->height<=0)||(tisch->width<=0)||(res->id<=0)||(raum->width<=0)||(raum->height<=0))
+		{
+			printf("\nUngültige Werte in d. txt Datei\n");
+		}
 	}else
 	{
-		printf("\nERROR");
+		printf("\nFILE couldn't be oppened");
 	}
-
 	fclose(fp);
 }
 
