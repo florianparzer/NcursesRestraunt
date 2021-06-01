@@ -301,7 +301,10 @@ tableList *getTables(table *t, tableList *list, int perimeter){
 void checkResevation(reservation *res, tableList *list, int perimeter){
 	table *tab = res->resTable;
 	tableList *possibleTables = getTables(tab, list, perimeter);
+	tableList *tmp = possibleTables;
+	while(tmp != NULL){
 
+	}
 }
 
 void destroyTable(table *t){
