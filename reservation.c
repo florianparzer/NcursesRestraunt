@@ -59,14 +59,8 @@ int main(int argc, char *argv[]) {
 	mvwprintw(nav, 7, 2, "delete room <F8>");
 	mvwprintw(nav, 8, 2, "delete room <F9>");
 	wrefresh(nav);
-
-<<<<<<< HEAD
-
-=======
 	out = create_newwin(LINES - navHeight- 4, navWidth, 4+navHeight, 0);
 
-	/*
->>>>>>> 8cb2911 (check reservation gemacht)
 	room *r = createRoom(150, 70, "Restraunt");
 	addTable(r, 100, 30, 30, 20, 20);
 	addTable(r, 101, 35, 35, 20, 20);
