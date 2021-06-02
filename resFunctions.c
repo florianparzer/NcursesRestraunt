@@ -9,7 +9,7 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ncurses.h>
-#include"resFunctions.h"
+#include"include/resFunctions.h"
 
 int PROMPTLINE = 1;
 int INPUTLINE = 2;
@@ -132,11 +132,10 @@ WINDOW *printRoom(room *room){
 		t = list->table;
 		if(t->win == NULL){
 			t->win = create_newwin(t->height, t->width, t->yPos + rYpos +1, t->xPos + rXpos + 1);
+			mvwprintw(wRoom, t->yPos, t->xPos+1, "%d", t->id);
 		}
 		list = list->nextTable;
 		wrefresh(wRoom);
-
-		//sleep(10);
 	}
 	wrefresh(wRoom);
 	return wRoom;
@@ -163,7 +162,7 @@ void deleteRoom(room *room){
 
 	while(list != NULL){
 		t = list->table;
-		destroyTable(t);
+		destroyTable(room->win, t);
 		tmp =list;
 		list = list->nextTable;
 		free(tmp);
@@ -247,12 +246,12 @@ void remove1Table(room *room, int id){
 	while(1){
 		if(tmp->id == id && room->head == list){
 			room->head = list->nextTable;
-			destroyTable(tmp);
+			destroyTable(room->win, tmp);
 			free(list);
 			break;
 		}else if(tmp->id == id){
 			prev->nextTable = list->nextTable;
-			destroyTable(tmp);
+			destroyTable(room->win, tmp);
 			free(list);
 			break;
 		}else if(list->nextTable == NULL){
@@ -274,6 +273,10 @@ tableList *getTables(table *t, tableList *list, int perimeter){
 	int pHeight = t->height +2*perimeter;
 	int pWidth = t->width + 2*perimeter;
 	while((tmp = cur->table) != NULL){
+		if(tmp->id == t->id){
+			cur = cur->nextTable;
+			continue;
+		}
 		if((tmp->xPos >= pXpos && tmp->xPos <= pXpos+pWidth) || (tmp->xPos+tmp->width >= pXpos && tmp->xPos + tmp->width <= pXpos + pWidth)){
 			if((tmp->yPos >= pYpos && tmp->yPos <= pYpos + pHeight) || (tmp->yPos+tmp->height >= pYpos && tmp->yPos + tmp->height <= pYpos + pHeight)){
 				element->table = tmp;
@@ -298,17 +301,43 @@ tableList *getTables(table *t, tableList *list, int perimeter){
 	return result;
 }
 
-void checkResevation(reservation *res, tableList *list, int perimeter){
-	table *tab = res->resTable;
+void checkResevation(reservation *res, reservation *rList, tableList *list, int perimeter, WINDOW *out){
+	table *tab;
 	tableList *possibleTables = getTables(tab, list, perimeter);
 	tableList *tmp = possibleTables;
-	while(tmp != NULL){
-
+	reservation *rTmp = rList;
+	table *tTmp;
+	time_t startT = mktime(res->startTime);
+	time_t endT = mktime(res->endTime);
+	time_t tStartT;
+	time_t tEndT;
+	int line = 1;
+	while(rTmp != NULL){
+		tab = rTmp->resTable;
+		if(rTmp->id == res->id){
+			rTmp = rTmp->next;
+			continue;
+		}
+		while(tmp != NULL){
+			tTmp = tmp->table;
+			if(tTmp->id == tab->id){
+				tStartT = mktime(rTmp->startTime);
+				tEndT = mktime(rTmp->endTime);
+				if(((startT >= tStartT && startT <= tEndT) || (endT >= tStartT && endT <= tEndT)) ||
+						((tStartT >= startT && tStartT <= endT) || (tEndT >= startT && tEndT <= endT))){
+					mvwprintw(out, line, 11, "%s", rTmp->kontaktP);
+					line++;
+				}
+			}
+			tmp = tmp->nextTable;
+		}
+		rTmp = rTmp->next;
 	}
 }
 
-void destroyTable(table *t){
+void destroyTable(WINDOW *room, table *t){
 	destroy_win(t->win);
+	mvwprintw(room, t->yPos, t->xPos+1, "  ");
 	free(t);
 }
 

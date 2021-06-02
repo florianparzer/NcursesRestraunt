@@ -12,12 +12,13 @@
 #include <stdlib.h>
 #include <string.h>
 #include <ncurses.h>
-#include "resFunctions.h"
+#include "include/resFunctions.h"
 
 int main(int argc, char *argv[]) {
 	char file[20];
 	char buffer[30];
 	WINDOW *nav;
+	WINDOW *out;
 	int navHeight = 10;
 	int navWidth = 32;
 	int ch;
@@ -48,7 +49,7 @@ int main(int argc, char *argv[]) {
 	printw("Press F1 to exit");
 	refresh();
 
-	nav = create_newwin(navHeight, navWidth, 5, 0);
+	nav = create_newwin(navHeight, navWidth, 3, 0);
 	mvwprintw(nav, 1, 2, "Save file <F2>");
 	mvwprintw(nav, 2, 2, "create table <F3>");
 	mvwprintw(nav, 3, 2, "delete table <F4>");
@@ -56,9 +57,16 @@ int main(int argc, char *argv[]) {
 	mvwprintw(nav, 5, 2, "delete reservation <F6>");
 	mvwprintw(nav, 6, 2, "create room <F7>");
 	mvwprintw(nav, 7, 2, "delete room <F8>");
+	mvwprintw(nav, 8, 2, "delete room <F9>");
 	wrefresh(nav);
 
+<<<<<<< HEAD
 
+=======
+	out = create_newwin(LINES - navHeight- 4, navWidth, 4+navHeight, 0);
+
+	/*
+>>>>>>> 8cb2911 (check reservation gemacht)
 	room *r = createRoom(150, 70, "Restraunt");
 	addTable(r, 100, 30, 30, 20, 20);
 	addTable(r, 101, 35, 35, 20, 20);
@@ -255,6 +263,16 @@ int main(int argc, char *argv[]) {
 							break;
 						}
 					}
+					clearLine(PROMPTLINE);
+					break;
+			case KEY_F(9):
+					mvprintw(PROMPTLINE, 0, "Geben Sie eine Tisch ID an");
+					mvscanw(INPUTLINE, 0, "%d", &id);
+					clearLine(INPUTLINE);
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Geben Sie eine Tisch ID an");
+					mvscanw(INPUTLINE, 0, "%d", &id);
+					clearLine(INPUTLINE);
 					clearLine(PROMPTLINE);
 					break;
 			default:
