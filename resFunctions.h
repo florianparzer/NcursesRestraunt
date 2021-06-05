@@ -11,6 +11,7 @@
 #include <ncurses.h>
 
 
+
 #endif /* SRC_17_RESFUNCTIONS_H_ */
 
 
@@ -29,7 +30,7 @@ typedef struct tableList{
 }tableList;
 
 typedef struct room{
-	struct tablelist* head;
+	struct tableList* head;
 	char *name;
 	int width;
 	int height;
@@ -39,7 +40,9 @@ typedef struct room{
 typedef struct reservation{
 	int id;
 	struct reservation *next;
-	struct tm *timeslot;
+	struct tm *startTime;
+	struct tm *endTime;
+	char *kontaktP;
 	table *resTable;
 }reservation;
 
@@ -59,6 +62,7 @@ void destroyTable(table *t);
 WINDOW *create_newwin(int hight, int width, int starty, int startx);
 void destroy_win(WINDOW *local_win);
 WINDOW *printRoom(room *room);
-
-
 void clearLine(int line);
+void addReservation(reservation *res, room *raum, char* kontaktp, int id);
+
+

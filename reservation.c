@@ -1,8 +1,11 @@
 /*
- * reservation.c
- *
- *  Created on: May 13, 2021
- *      Author: osboxes
+ ============================================================================
+ Name        : hope.c
+ Author      : ic20b094
+ Version     :
+ Copyright   : Davor Radman
+ Description : Hello World in C, Ansi-style
+ ============================================================================
  */
 
 #include <stdio.h>
@@ -20,12 +23,19 @@ int main(int argc, char *argv[]) {
 	int ch;
 	room *r = NULL;
 	WINDOW *wRoom = NULL;
+	int eCheck=0;
 
 	int id = 0;
 	int tXpos;
 	int tYpos;
 	int tHeight;
 	int tWitdth;
+
+	reservation *res=NULL;
+	char kontaktp[30]="\0";
+	int resID=0;
+	char* startTime=NULL;
+	char* endTime=NULL;
 
 
 	initscr();
@@ -67,8 +77,12 @@ int main(int argc, char *argv[]) {
 	}else{
 		strcpy(file,argv[1]);
 	}
+	// Check if File is already existent otherwise create new file
+	do{
+		eCheck=existence_cheque(file);
 
-	//TODO Input Davor
+	}while(eCheck!=1);
+
 
 	while(1) {
 		wRoom = printRoom(r);
@@ -118,7 +132,34 @@ int main(int argc, char *argv[]) {
 					remove1Table(r, id);
 					break;
 			case KEY_F(5):
-					//TODO
+					echo();
+				 	clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie eine Reservations ID ein");
+					mvscanw(INPUTLINE, 0, "%d", &resID);
+					clearLine(INPUTLINE);
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie eine Kontaktperson (max. 30 Zeichen) an");
+					mvscanw(INPUTLINE, 0, "%s", &kontaktp);
+					clearLine(INPUTLINE);
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie eine Kontaktperson (max. 30 Zeichen) an");
+					mvscanw(INPUTLINE, 0, "%s", &kontaktp);
+					clearLine(INPUTLINE);
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie die Startzeit (YYYYMMDDHHMM) f. die Reservierung ein");
+					mvscanw(INPUTLINE, 0, "%d", &startTime);
+					clearLine(INPUTLINE);
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie die Enddzeit (YYYYMMDDHHMM) für die Reserierung ein");
+					mvscanw(INPUTLINE, 0, "%d", &endTime);
+					clearLine(INPUTLINE);
+					clearLine(PROMPTLINE);
+					noecho();
+					clearLine(PROMPTLINE);
+					clearLine(INPUTLINE);
+					addReservation(res, r, kontaktp, resID);
+					printRoom(r); //Anpassen
+
 					break;
 			case KEY_F(6):
 					//TODO
