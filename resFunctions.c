@@ -275,20 +275,71 @@ void clearLine(int line){
 	refresh();
 }
 
-void addReservation(reservation *res, room *raum, char *kontaktp, int id)
+void addReservation(reservation *res, room *raum, char *kontaktp, int id, struct tm *sTime, struct tm *eTime)
 {
-	tableList *list=raum->head;
-	table *tmp=list->table;
+	//mvprintw(PROMPTLINE, 0, "%d id\n%s Kontaktperson\n%d RaumID", id, kontaktp, raum->head->table->id);
+	tableList* tempTList= raum->head;
+	table* tempTable=tempTList->table;
+	reservation* newRes=malloc(sizeof(reservation));
+	tableList*prev=NULL;
+
+	int stime,etime;
+	int stime_old, etime_old;
 
 
-	if(tmp->id == id)
-	{
-		res->id=id;
-		res->kontaktP=kontaktp;
-		res->resTable=tmp;
+
+	while(1){
+		if(tempTable->id == id){
+
+				newRes->id=id;
+				newRes->kontaktP=kontaktp;
+				newRes->next=NULL;
+				newRes->startTime=sTime;
+				newRes->endTime=eTime;
+
+
+				stime=mktime(newRes->startTime); // Abfrage von current timestamp
+				etime=mktime(newRes->endTime);
+				stime_old=mktime(res->startTime);
+				etime_old=mktime(res->endTime);
+
+
+				if(stime>etime){
+
+					mvprintw(PROMPTLINE, 0, "Falsche Zeitangabe");
+					break;
+				}
+
+/*
+				if(stime >= stime_old || etime >= etime_old){
+					newRes->id=id+50;
+					newRes->kontaktP=kontaktp;
+					newRes->next=NULL;
+					newRes->startTime=sTime;
+					newRes->endTime=eTime;
+
+					mvprintw(PROMPTLINE, 0, "%d id %s kontaktperson %d tempTableID",newRes->id, newRes->kontaktP,tempTable->id );
+				}*/
+
+			}else
+			{
+
+				res=newRes;
+				break;
+			}
+
+
+
+		if(tempTList->nextTable == NULL){
+			mvprintw(PROMPTLINE, 0,"Ungültige ID Bitte zuerst einen Tisch erstellen");
+			break;
+		}
+
+		prev=tempTList;
+		tempTList=tempTList->nextTable;
+		tempTable=tempTList->table;
+
 	}
-
-
 }
 
 

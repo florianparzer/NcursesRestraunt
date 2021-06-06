@@ -63,6 +63,6 @@ WINDOW *create_newwin(int hight, int width, int starty, int startx);
 void destroy_win(WINDOW *local_win);
 WINDOW *printRoom(room *room);
 void clearLine(int line);
-void addReservation(reservation *res, room *raum, char* kontaktp, int id);
+void addReservation(reservation *res, room *raum, char* kontaktp, int id, struct tm *sTime, struct tm *eTime);
 
 

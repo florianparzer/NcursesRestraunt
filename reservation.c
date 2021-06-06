@@ -21,7 +21,7 @@ int main(int argc, char *argv[]) {
 	int navHeight = 10;
 	int navWidth = 32;
 	int ch;
-	room *r = NULL;
+	//room *r = NULL;
 	WINDOW *wRoom = NULL;
 	int eCheck=0;
 
@@ -33,9 +33,12 @@ int main(int argc, char *argv[]) {
 
 	reservation *res=NULL;
 	char kontaktp[30]="\0";
-	int resID=0;
-	char* startTime=NULL;
-	char* endTime=NULL;
+	int resID;
+
+	struct tm *sTime= malloc(sizeof(struct tm));
+	struct tm *eTime= malloc(sizeof(struct tm));
+	int year, month, day, shour,sminute, ehour, eminute=0;
+
 
 
 	initscr();
@@ -55,7 +58,7 @@ int main(int argc, char *argv[]) {
 	mvwprintw(nav, 7, 2, "delete room <F8>");
 	wrefresh(nav);
 
-	/*
+
 	room *r = createRoom(150, 70, "Restraunt");
 	addTable(r, 100, 30, 30, 20, 20);
 	addTable(r, 101, 35, 35, 20, 20);
@@ -64,24 +67,22 @@ int main(int argc, char *argv[]) {
 	for(int i= 0; i < 3; i++){
 		addTable(r, i, 2*i, 5*i, 1+i, 2+i);
 	}
-	*/
+
 
 	if(argc == 1){
-		echo();
-		clearLine(PROMPTLINE);
-		mvprintw(PROMPTLINE, 0, "Bitte geben Sie ein file Namen ein");
-		mvscanw(INPUTLINE, 0, "%s", file);
-		noecho();
-		clearLine(INPUTLINE);
-		clearLine(PROMPTLINE);
+		do{
+			echo();
+			clearLine(PROMPTLINE);
+			mvprintw(PROMPTLINE, 0, "Bitte geben Sie ein file Namen ein");
+			mvscanw(INPUTLINE, 0, "%s", file);
+			eCheck=existence_cheque(file);
+			noecho();
+			clearLine(INPUTLINE);
+			clearLine(PROMPTLINE);
+		}while (eCheck !=1);
 	}else{
 		strcpy(file,argv[1]);
 	}
-	// Check if File is already existent otherwise create new file
-	do{
-		eCheck=existence_cheque(file);
-
-	}while(eCheck!=1);
 
 
 	while(1) {
@@ -141,25 +142,83 @@ int main(int argc, char *argv[]) {
 					mvprintw(PROMPTLINE, 0, "Bitte geben Sie eine Kontaktperson (max. 30 Zeichen) an");
 					mvscanw(INPUTLINE, 0, "%s", &kontaktp);
 					clearLine(INPUTLINE);
+
+					//do{
+
+
 					clearLine(PROMPTLINE);
-					mvprintw(PROMPTLINE, 0, "Bitte geben Sie eine Kontaktperson (max. 30 Zeichen) an");
-					mvscanw(INPUTLINE, 0, "%s", &kontaktp);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie das Startjahr(YYYY) f. die Reservierung ein");
+					mvscanw(INPUTLINE, 0, "%d", &year);
 					clearLine(INPUTLINE);
 					clearLine(PROMPTLINE);
-					mvprintw(PROMPTLINE, 0, "Bitte geben Sie die Startzeit (YYYYMMDDHHMM) f. die Reservierung ein");
-					mvscanw(INPUTLINE, 0, "%d", &startTime);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie das Startmonat(MM) f. die Reservierung ein");
+					mvscanw(INPUTLINE, 0, "%d", &month);
 					clearLine(INPUTLINE);
 					clearLine(PROMPTLINE);
-					mvprintw(PROMPTLINE, 0, "Bitte geben Sie die Enddzeit (YYYYMMDDHHMM) für die Reserierung ein");
-					mvscanw(INPUTLINE, 0, "%d", &endTime);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie das Starttag(DD) f. die Reservierung ein");
+					mvscanw(INPUTLINE, 0, "%d ", &day);
+					clearLine(INPUTLINE);
+
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie das Startzeit (hh) f. die Reservierung ein");
+					mvscanw(INPUTLINE, 0, "%d", &shour);
 					clearLine(INPUTLINE);
 					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie das Startzeit (mm) f. die Reservierung ein");
+					mvscanw(INPUTLINE, 0, "%d", &sminute);
+					clearLine(INPUTLINE);
+
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie das Endzeit (hh) f. die Reservierung ein");
+					mvscanw(INPUTLINE, 0, "%d", &ehour);
+					clearLine(INPUTLINE);
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie das Endzeit (mm) f. die Reservierung ein");
+					mvscanw(INPUTLINE, 0, "%d", &eminute);
+					clearLine(INPUTLINE);
+
+					if(30>sminute || sminute>0)
+					{
+						sminute=30;
+					}else if(59>sminute || sminute>30){
+						sminute=0;
+						shour=shour+1;
+					}else if(30>eminute || eminute>0)
+					{
+						eminute=30;
+					}else if(59>eminute || eminute>30){
+						eminute=0;
+						ehour=shour+1;
+					}
+
+
+				//	}while((year< 2021) || (1> month >12) || (day>31) || (0>shour>24)|| (0>sminute>=60) || (0>shour>24)|| (0>sminute>=60) ||
+				//			((month ==2 )&&(day>29)) || ((month==4)&&(day>30)) || ((month==6)&&(day>30)) || ((month==9)&&(day>30)) || ((month==11)&&(day>30)));
 					noecho();
 					clearLine(PROMPTLINE);
 					clearLine(INPUTLINE);
-					addReservation(res, r, kontaktp, resID);
-					printRoom(r); //Anpassen
 
+					//mvprintw(PROMPTLINE, 0, "%d %d %d %d %d %d %d",year, month, day, shour, sminute, ehour, eminute);
+
+					year=year-1900;
+					month=month-1;
+					sTime->tm_year=year;
+					sTime->tm_mon=month;
+					sTime->tm_mday=day;
+					sTime->tm_hour=shour;
+					sTime->tm_min=sminute;
+					eTime->tm_year=year;
+					eTime->tm_mon=month;
+					eTime->tm_mday=day;
+					eTime->tm_hour=ehour;
+					eTime->tm_min=eminute;
+
+					//mvprintw(PROMPTLINE, 0, "\n%d %d %d %d %d %d %d",sTime->tm_year, sTime->tm_mon, sTime->tm_mday, sTime->tm_hour, sTime->tm_min, eTime->tm_hour, eTime->tm_min);
+
+					addReservation(res, r, kontaktp, resID, sTime, eTime);
+					printRoom(r); //Anpassen
+					free(eTime);
+					free(sTime);
 					break;
 			case KEY_F(6):
 					//TODO
