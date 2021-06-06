@@ -136,17 +136,18 @@ int main(int argc, char *argv[]) {
 					break;
 			case KEY_F(5):
 					echo();
-				 	clearLine(PROMPTLINE);
-					mvprintw(PROMPTLINE, 0, "Bitte geben Sie eine Reservations ID ein");
+		 			clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie eine Reservation ID ein");
 					mvscanw(INPUTLINE, 0, "%d", &resID);
+					clearLine(INPUTLINE);
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie die Tisch ID ein");
+					mvscanw(INPUTLINE, 0, "%d", &tID);
 					clearLine(INPUTLINE);
 					clearLine(PROMPTLINE);
 					mvprintw(PROMPTLINE, 0, "Bitte geben Sie eine Kontaktperson (max. 30 Zeichen) an");
 					mvscanw(INPUTLINE, 0, "%s", &kontaktp);
 					clearLine(INPUTLINE);
-
-					//do{
-
 
 					clearLine(PROMPTLINE);
 					mvprintw(PROMPTLINE, 0, "Bitte geben Sie das Startjahr(YYYY) f. die Reservierung ein");
@@ -179,28 +180,25 @@ int main(int argc, char *argv[]) {
 					mvscanw(INPUTLINE, 0, "%d", &eminute);
 					clearLine(INPUTLINE);
 
-					if(30>sminute || sminute>0)
+					if(30>sminute && sminute>=0)
 					{
-						sminute=30;
-					}else if(59>sminute || sminute>30){
 						sminute=0;
-						shour=shour+1;
-					}else if(30>eminute || eminute>0)
-					{
-						eminute=30;
-					}else if(59>eminute || eminute>30){
-						eminute=0;
-						ehour=shour+1;
+					}else if(59>=sminute && sminute>=30){
+						sminute=30;
 					}
 
+					if(30>=eminute && eminute>0)
+					{
+						eminute=30;
+					}else if(59>=eminute && eminute>30){
+						eminute=0;
+						ehour=ehour+1;
+					}
 
-				//	}while((year< 2021) || (1> month >12) || (day>31) || (0>shour>24)|| (0>sminute>=60) || (0>shour>24)|| (0>sminute>=60) ||
-				//			((month ==2 )&&(day>29)) || ((month==4)&&(day>30)) || ((month==6)&&(day>30)) || ((month==9)&&(day>30)) || ((month==11)&&(day>30)));
 					noecho();
 					clearLine(PROMPTLINE);
 					clearLine(INPUTLINE);
 
-					//mvprintw(PROMPTLINE, 0, "%d %d %d %d %d %d %d",year, month, day, shour, sminute, ehour, eminute);
 
 					year=year-1900;
 					month=month-1;
@@ -215,10 +213,8 @@ int main(int argc, char *argv[]) {
 					eTime->tm_hour=ehour;
 					eTime->tm_min=eminute;
 
-					//mvprintw(PROMPTLINE, 0, "\n%d %d %d %d %d %d %d",sTime->tm_year, sTime->tm_mon, sTime->tm_mday, sTime->tm_hour, sTime->tm_min, eTime->tm_hour, eTime->tm_min);
+					addReservation(res, r, kontaktp, resID, tID, sTime, eTime);
 
-					addReservation(res, r, kontaktp, resID, sTime, eTime);
-					printRoom(r); //Anpassen
 					free(eTime);
 					free(sTime);
 					break;

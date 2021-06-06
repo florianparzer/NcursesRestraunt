@@ -64,7 +64,7 @@ void destroy_win(WINDOW *local_win);
 WINDOW *printRoom(room *room);
 void clearLine(int line);
 <<<<<<< HEAD
-void addReservation(reservation *res, room *raum, char* kontaktp, int id, struct tm *sTime, struct tm *eTime);
+void addReservation(reservation *res, room *raum, char* kontaktp, int resID, int id, struct tm *sTime, struct tm *eTime);
 
 
 =======
