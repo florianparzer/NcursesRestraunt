@@ -1,8 +1,26 @@
-/*
- * resFunctions.c
- *
- *  Created on: May 12, 2021
- *      Author: ic20b094
+/**
+ ====================================================================================
+ Name        : resFunctions.c
+ Author      : ic20b081 + ic20b094
+ Version     :
+ Copyright   : Florian Parzer & Davor Radman
+ Description :
+	 Die aktuelle lage hat gezeigt, dass es, auch in der Zukunft, wichtig sein wird,
+	 nachzuvollziehen,wo sich Menschen aufgehalten haben. Zu diesem Zweck muss ein
+	 Reservierungssystem fürLokale entwickelt werden. Dieses Reservierungssystem muss
+	 in der Lage sein, benachbarteSitzgruppen aufzuzeichnen.
+	 Da nicht jedes Lokal gleich aussieht, muss es möglich sein, die Position der
+	 einzelnen Tischeanzugeben. Ebenso muss im Nachhinein ermittelt werden können,
+	 welche Tische weniger alseinen bestimmten Abstand zu einem gefragten Tisch belegt
+	 gewesen sind.
+	 Um den aufwand gering zuHalten, muss pro Tisch nur eine Kontaktperson gespeichert
+	 wer-den. Sie können auch davon ausgehen, dass eine Reservierung nie mehr Gäste als
+	 die mögli-che Sitzlpatzanzahl des Tisches beinhaltet.Das Programm muss zusätzlich
+	 ein User-Interface implementieren. Bie der Implementierungdes User-Interfaces können
+	 Sie frei zwischen einer TUI (Textbased User Interface) und einerGUI (Graphical User
+	 Interface) wählen. Die beiden vorgesehenen Bibliotheken können Sie An-hang A.1
+	 entnehmen
+ ======================================================================================
  */
 
 #include <stdio.h>
@@ -14,12 +32,29 @@
 int PROMPTLINE = 1;
 int INPUTLINE = 2;
 
+/**
+ * @fn void create_restaurant(char*)
+ * @brief Crating a file with the typed/transmitted in filename
+ *
+ * @pre
+ * @post file is created in the folder
+ */
+
 void create_restaurant(char* fname)
 {
 	FILE *fp=fopen(fname, "w+");
 	fclose(fp);
 
 }
+
+/**
+ * @fn int existence_cheque(char*)
+ * @brief Checking if the a file exists with the typed in filename
+ *
+ * @post File is created by create_restaurant if necessary
+ * @param fname
+ * @return to continue or abort the while function in the main
+ */
 
 int existence_cheque(char* fname)
 {
@@ -37,7 +72,16 @@ int existence_cheque(char* fname)
 	fclose(fp);
 }
 
-
+/**
+ * @fn void export_data(char*, table*, reservation*, room*)
+ * @brief The preparation for the save function to save the
+ * parameters in a created or allready opened txt file
+ *
+ * @pre
+ * @post Parameters are exported into a file and can be loaded
+ * @param Pointers to the parameter lists beginnings to be able to
+ * export the data
+ */
 void export_data(char* fname, table *tisch, reservation *res, room *raum)
 {
 	FILE *fp=fopen(fname,"w+");
@@ -56,6 +100,17 @@ void export_data(char* fname, table *tisch, reservation *res, room *raum)
 	fclose(fp);
 
 }
+
+/**
+ * @fn void get_data(char*, table*, reservation*, room*)
+ * @brief Importing data from previosly exported lists by the
+ * same structure. Can also import from a manually made list under
+ * if the formation is fitting.
+ *
+ * @pre Need to get already saved data from extern
+ * @post Parameters are imported from a external file
+ * @param Getting values at a program start.
+ */
 
 void  get_data(char* fname, table *tisch, reservation * res, room *raum){
 
@@ -81,24 +136,42 @@ void  get_data(char* fname, table *tisch, reservation * res, room *raum){
 	fclose(fp);
 }
 
+/**
+ * @fn WINDOW create_newwin*(int, int, int, int)
+ * @brief Drawing the window in the terminal with defined
+ * borders and the previosled chosen size from a chosen x
+ * and y Position
+ *
+ * @pre Empty interface
+ * @post Drawn window on the user interface
+ * @return pointer
+ */
 
 WINDOW *create_newwin(int height, int width, int starty, int startx){
 	WINDOW *local_win;
 	local_win = newwin(height, width, starty, startx);
-	//box(local_win, frame , frame);
+	/**box(local_win, frame , frame); */
 	wborder(local_win, '|', '|', '-','-','+','+','+','+');
-	wrefresh(local_win);            /* Show that box                */
+	wrefresh(local_win);            /** Show that box                */
 
 	return local_win;
 }
 
+/**
+ * @fn void destroy_win(WINDOW*)
+ * @brief deleting sent Window
+ *
+ * @pre drawn window on terminal
+ * @post cleared inteface of certain window
+ * @param local_win wich is to be deleted
+ */
 void destroy_win(WINDOW *local_win) {
-	/* box(local_win, ' ', ' '); : This won't produce the desired
+	/** box(local_win, ' ', ' '); : This won't produce the desired
 	 * * result of erasing the window. It will leave it's four corners
 	 * * and so an ugly remnant of window.          */
 
 	wborder(local_win, ' ', ' ', ' ',' ',' ',' ',' ',' ');
-	/* The parameters taken are
+	/** The parameters taken are
 	 * * 1. win: the window on which to operate
 	 * * 2. ls: character to be used for the left side of the window
 	 * * 3. rs: character to be used for the right side of the window
@@ -111,6 +184,16 @@ void destroy_win(WINDOW *local_win) {
 	wrefresh(local_win);
 	delwin(local_win);
 }
+
+/**
+ * @fn WINDOW printRoom*(room*)
+ * @brief Drawing room
+ *
+ * @pre
+ * @post
+ * @param room
+ * @return
+ */
 
 WINDOW *printRoom(room *room){
 	if(room == NULL){
@@ -454,7 +537,7 @@ void delReservation(reservation *res, int resID)
 		return;
 	}
 
-	while((resList->next!= NULL) && (resList->id != resID)){
+	while((resList != NULL) && (resList->id != resID)){
 		prev=resList;
 		resList=resList->next;
 	}
