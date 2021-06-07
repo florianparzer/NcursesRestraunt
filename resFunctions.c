@@ -187,11 +187,11 @@ void destroy_win(WINDOW *local_win) {
 
 /**
  * @fn WINDOW printRoom*(room*)
- * @brief Drawing room
+ * @brief Drawing room on terminal beginnign at certain position
  *
  * @pre
  * @post
- * @param room
+ * @param room all parameters
  * @return
  */
 
@@ -431,14 +431,21 @@ void clearLine(int line){
 	refresh();
 }
 
-
-void addReservation(reservation *res, room *raum, char *kontaktp, int resID, int id, struct tm *sTime, struct tm *eTime)
+/**
+ * @fn void addReservation(reservation*, room*, char*, int, int, struct tm*, struct tm*)
+ * @brief For creating a reservation at a previously typed time table and chosen ID
+ * with check if the table is booked for the chosen period of time
+ *
+ * @pre table must be already created
+ * @post
+ */
+void addReservation(reservation **res, room *raum, char *kontaktp, int resID, int id, struct tm *sTime, struct tm *eTime)
 {
 
 	tableList* tempTList= raum->head;
 	table* tempTable=tempTList->table;
 	reservation* newRes=malloc(sizeof(reservation));
-	reservation* tempRes=res;
+	reservation* tempRes=*res;
 
 	int stime,etime;
 	int stime_tmp, etime_tmp;
@@ -487,8 +494,8 @@ void addReservation(reservation *res, room *raum, char *kontaktp, int resID, int
 		return;
 	}
 
-	if(res==NULL){
-		res=newRes;
+	if(*res==NULL){
+		*res=newRes;
 		return;
 	}
 
@@ -530,15 +537,15 @@ void addReservation(reservation *res, room *raum, char *kontaktp, int resID, int
 }
 
 
-void delReservation(reservation *res, int resID)
+void delReservation(reservation **res, int resID)
 {
 
-	reservation *resList=res;
+	reservation *resList=*res;
 	reservation *prev;
 
 	if((resList->next!=NULL) && (resList->id == resID)){
 
-		res=resList->next;
+		*res=resList->next;
 		free(resList);
 		return;
 	}

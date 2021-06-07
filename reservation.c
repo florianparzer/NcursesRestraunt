@@ -62,6 +62,7 @@ int main(int argc, char *argv[]) {
 	struct tm *sTime= malloc(sizeof(struct tm));
 	struct tm *eTime= malloc(sizeof(struct tm));
 	int year, month, day, shour,sminute, ehour, eminute=0;
+	int perimeter;
 
 	/**
 	 *  Start of the ncurses Userinterface	 */
@@ -91,9 +92,6 @@ int main(int argc, char *argv[]) {
 
 	if(argc == 1){
 
-			/**Checking if the User is willing to get data from a saved file
-			 *
-			 */
 		echo();
 		clearLine(PROMPTLINE);
 		mvprintw(PROMPTLINE, 0, "Bitte geben Sie ein file Namen ein");
@@ -262,21 +260,24 @@ int main(int argc, char *argv[]) {
 					eTime->tm_hour=ehour;
 					eTime->tm_min=eminute;
 
-					addReservation(res, r, kontaktp, resID, tID, sTime, eTime);
-
+					addReservation(&res, r, kontaktp, resID, tID, sTime, eTime);
 					free(eTime);
 					free(sTime);
+
+
 					break;
 			case KEY_F(6):
 					/**
 					 * To be able to delet a previosly created reservation,
 					 * by typing in the ID
 					 */
+					echo();
 					clearLine(PROMPTLINE);
 					mvprintw(PROMPTLINE, 0, "Bitte geben Sie die Reservation ID die Sie löschen möchten ein");
 					mvscanw(INPUTLINE, 0, "%d", &resID);
 					clearLine(INPUTLINE);
-					delReservation(res, resID);
+					delReservation(&res, resID);
+					noecho();
 					break;
 			case KEY_F(7):
 					/**
@@ -321,22 +322,56 @@ int main(int argc, char *argv[]) {
 					clearLine(PROMPTLINE);
 					break;
 			case KEY_F(9):
-					mvprintw(PROMPTLINE, 0, "Geben Sie eine Tisch ID an");
-					mvscanw(INPUTLINE, 0, "%d", &id);
-					clearLine(INPUTLINE);
-					clearLine(PROMPTLINE);
-					mvprintw(PROMPTLINE, 0, "Geben Sie eine Tisch ID an");
-					mvscanw(INPUTLINE, 0, "%d", &id);
-					clearLine(INPUTLINE);
-					clearLine(PROMPTLINE);
+					echo();
+				 			clearLine(PROMPTLINE);
+							mvprintw(PROMPTLINE, 0, "Bitte geben Sie eine Reservation ID ein");
+							mvscanw(INPUTLINE, 0, "%d", &resID);
+							clearLine(INPUTLINE);
+							clearLine(PROMPTLINE);
+							mvprintw(PROMPTLINE, 0, "Bitte geben Sie die Tisch ID ein");
+							mvscanw(INPUTLINE, 0, "%d", &tID);
+							clearLine(INPUTLINE);
+							clearLine(PROMPTLINE);
+							mvprintw(PROMPTLINE, 0, "Bitte geben Sie den Perimeter ein:");
+							mvscanw(INPUTLINE, 0, "%d", &perimeter);
+							clearLine(INPUTLINE);
+
+
+
+							noecho();
+							clearLine(PROMPTLINE);
+							clearLine(INPUTLINE);
+
+
+
+							reservation *resi;
+							reservation *resitmp=res;
+
+							while(resitmp!=NULL)
+							{
+								if(resitmp->id == resID)
+								{
+									resi=resitmp;
+									break;
+								}
+								resitmp=resitmp->next;
+							}
+
+					checkResevation(resi, res, r->head, perimeter, out);
+
 					break;
+
 			default:
 				break;
     	}
 	}
 
+	deleteRoom(r);
+
 	echo();
 	endwin();
+
+
 }
 
 
