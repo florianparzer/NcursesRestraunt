@@ -487,14 +487,19 @@ void addReservation(reservation *res, room *raum, char *kontaktp, int resID, int
 		return;
 	}
 
-	while(1){
+	if(res==NULL){
+		res=newRes;
+		return;
+	}
+
+	while(tempRes!=NULL){
 		tempTable=tempRes->resTable;
 
 		if(tempRes->id == resID)
 		{
 			mvprintw(PROMPTLINE, 0,"Reservation ID %d", resID);
 			free(tempRes);
-			break;
+			return;
 		}
 
 		if(tempTable->id== id){
@@ -507,7 +512,7 @@ void addReservation(reservation *res, room *raum, char *kontaktp, int resID, int
 
 				mvprintw(PROMPTLINE, 0,"Aktuelle Reservierung nicht möglich da Zeit bereits von ID %d besetzt", resID );
 				free(newRes);
-				break;
+				return;
 
 			}
 
@@ -517,8 +522,9 @@ void addReservation(reservation *res, room *raum, char *kontaktp, int resID, int
 		if(tempRes->next == NULL){
 
 			tempRes->next=newRes;
-			break;
+			return;
 		}
+
 		tempRes=tempRes->next;
 	}
 }

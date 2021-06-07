@@ -118,13 +118,11 @@ int main(int argc, char *argv[]) {
 
 		/**
 		 * The differnt F-Key inputs with necessary variable input with mvprtintw and mvscanw
-		 * because of the TUI.
-				 */
+		 * because of the TUI. */
 			case KEY_F(2):
 					/**
 					 * Saving the input in a external file
-					 * has to be done
-					 */
+					 * has to be done */
 					break;
 			case KEY_F(3):
 					/**
