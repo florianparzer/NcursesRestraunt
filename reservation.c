@@ -34,7 +34,7 @@ int main(int argc, char *argv[]) {
 
 	reservation *res=NULL;
 	char kontaktp[30]="\0";
-	int resID;
+	int resID,tID;
 
 	struct tm *sTime= malloc(sizeof(struct tm));
 	struct tm *eTime= malloc(sizeof(struct tm));
@@ -219,7 +219,11 @@ int main(int argc, char *argv[]) {
 					free(sTime);
 					break;
 			case KEY_F(6):
-					//TODO
+					clearLine(PROMPTLINE);
+					mvprintw(PROMPTLINE, 0, "Bitte geben Sie die Reservation ID die Sie löschen möchten ein");
+					mvscanw(INPUTLINE, 0, "%d", &resID);
+					clearLine(INPUTLINE);
+					delReservation(res, resID);
 					break;
 			case KEY_F(7):
 					echo();

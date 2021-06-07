@@ -441,3 +441,32 @@ void addReservation(reservation *res, room *raum, char *kontaktp, int resID, int
 }
 
 
+void delReservation(reservation *res, int resID)
+{
+
+	reservation *resList=res;
+	reservation *prev;
+
+	if((resList->next!=NULL) && (resList->id == resID)){
+
+		res=resList->next;
+		free(resList);
+		return;
+	}
+
+	while((resList->next!= NULL) && (resList->id != resID)){
+		prev=resList;
+		resList=resList->next;
+	}
+
+	if (resList == NULL)
+	{
+		return;
+	}
+
+	prev->next=resList->next;
+
+	free(resList);
+
+}
+

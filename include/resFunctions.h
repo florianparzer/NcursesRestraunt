@@ -66,3 +66,4 @@ void clearLine(int line);
 void addReservation(reservation *res, room *raum, char* kontaktp, int resID, int id, struct tm *sTime, struct tm *eTime);
 tableList *getTables(table *t, tableList *list, int perimeter);
 void checkResevation(reservation *res, reservation *rList, tableList *list, int perimeter, WINDOW *out);
+void delReservation(reservation *res, int resID);
