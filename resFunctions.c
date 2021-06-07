@@ -281,8 +281,8 @@ void addTable(room *room, int id, int xPos, int yPos, int height, int width){
 
 	while(list != NULL){
 		tmp = list->table;
-		if((xPos >= tmp->xPos-2 && xPos <= tmp->xPos+tmp->width+2) &&
-				(yPos >= tmp->yPos-2 && yPos <= tmp->yPos + tmp->height+2)){
+		if((xPos >= tmp->xPos-2 && xPos <= tmp->xPos+tmp->width+1) &&
+				(yPos >= tmp->yPos-2 && yPos <= tmp->yPos + tmp->height+1)){
 			mvprintw(PROMPTLINE, 0, "Position des Tisches %d nicht möglich", id);
 			return;
 		}
